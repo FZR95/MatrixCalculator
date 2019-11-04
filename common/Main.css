@@ -1,6 +1,10 @@
 .welcometext{
 	padding: 20upx;
 	color: #999999;
+	text-align: center;
+}
+.github{
+	color: #09BB07;
 }
 .MatrixPanel {
 	margin-top: 10upx;
@@ -53,7 +57,6 @@
 	text-align: center;
 
 }
-=======
 .welcometext{
 	padding: 20upx;
 	color: #999999;
