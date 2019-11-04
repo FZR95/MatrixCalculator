@@ -1,0 +1,57 @@
+/*Popups*/
+.popup {
+	padding: 15upx;
+	background: #fff;
+	box-sizing: border-box;
+	border-radius: 10upx;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+}
+
+.pop_title {
+	display: flex;
+	text-align: center;
+	font-weight: bold;
+	font-size: 36upx;
+	line-height: 80upx;
+	color: #333;
+	justify-content: center;
+}
+
+.pop_input {
+	display: inline-flex;
+	border-bottom: #8F8F94 solid 1upx;
+	width: 100upx;
+	text-align: center;
+}
+
+.pop_juzhen {
+	display: flex;
+	font-size: 16upx;
+}
+
+.pop_button {
+	display: flex;
+	text-align: center;
+	justify-content: center;
+}
+
+.pop_showresult {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.pop_button.br {
+	display: none;
+}
+
+.pop_row {
+	display: inline-block;
+	margin-right: 10upx;
+}
+
+.pop_row:last-child {
+	margin: 0;
+}

@@ -1,0 +1,111 @@
+.welcometext{
+	padding: 20upx;
+	color: #999999;
+}
+.MatrixPanel {
+	margin-top: 10upx;
+	border-top: #09BB07 2upx solid;
+}
+
+.CreateView {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.rcView {
+	display: flex;
+	flex-direction: column;
+	margin-right: 10upx;
+}
+
+.rc {
+	display: flex;
+	flex-direction: row;
+	margin-top: 10upx;
+}
+
+.small {
+	height: 60upx;
+	font-size: 28upx;
+	line-height: 60upx;
+	position: absolute;
+	right: 10upx;
+}
+
+.CreateButton {
+	display: flex;
+	margin: 10upx;
+	height: 100%;
+}
+
+.switch {
+	transform: scale(0.7)
+}
+
+.input {
+	display: flex;
+	background-color: white;
+	border: #8F8F94 solid 1px;
+	border-radius: 8upx;
+	width: 150upx;
+	text-align: center;
+
+}
+=======
+.welcometext{
+	padding: 20upx;
+	color: #999999;
+}
+.MatrixPanel {
+	margin-top: 10upx;
+	border-top: #09BB07 2upx solid;
+}
+
+.CreateView {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.rcView {
+	display: flex;
+	flex-direction: column;
+	margin-right: 10upx;
+}
+
+.rc {
+	display: flex;
+	flex-direction: row;
+	margin-top: 10upx;
+}
+
+.small {
+	height: 60upx;
+	font-size: 28upx;
+	line-height: 60upx;
+	position: absolute;
+	right: 10upx;
+}
+
+.CreateButton {
+	display: flex;
+	margin: 10upx;
+	height: 100%;
+}
+
+.switch {
+	transform: scale(0.7)
+}
+
+.input {
+	display: flex;
+	background-color: white;
+	border: #8F8F94 solid 1px;
+	border-radius: 8upx;
+	width: 150upx;
+	text-align: center;
+
+}
