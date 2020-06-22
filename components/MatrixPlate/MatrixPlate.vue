@@ -1,32 +1,39 @@
 <template>
 	<keep-alive>
-		<view class="content">
-			<view class="header">
-				<view class="inline left">矩阵{{matrix.id+1}}</view>
-				<image src="../../static/bianji.png" class="icon1 inline" @click="edit()"></image>
-				<image src="../../static/shanchu.png" class="icon2 inline" @click="deletem()"></image>
-				<view class="inline right">{{matrix.row}}×{{matrix.column}}</view>
-			</view>
-			<view class="panel">
+		<view>
+			<view class="main">
+				<view class="header">
+					<image src="../../static/edit.png" @click="edit()"></image>
+					<view>矩阵{{matrix.id+1}} {{matrix.row}}×{{matrix.column}}</view>
+					<image src="../../static/delete.png" @click="deletem()"></image>
+				</view>
 				<view class="matrix">
 					<text class="Matrixshow">{{Matrix_show}}</text>
 				</view>
 			</view>
-			<uniPopup type="center" ref="popup">
-				<text>请按照a11,a12,a13,...,a21,...的次序填写数组，并用空格或回车隔开</text>
-				<textarea placeholder="请在此输入..." auto-height="true" v-model="str" maxlength="-1" class="textarea"></textarea>
-				<button @click="close()">确定</button>
-			</uniPopup>
+			<uni-popup type="center" ref="popup">
+				<view class="POPUP">
+					<view class="header">
+						<view>编辑矩阵{{matrix.id+1}}</view>
+						<view style="display: flex;font-size: 32rpx;align-items: center;">字体大小<input v-model="font_size" type="number" /></view>
+					</view>
+					<view class="content">
+						<textarea v-model="str" maxlength="-1" class="textarea" :style="'font-size:'+font_size+'rpx'"></textarea>
+					</view>
+					<button @click="close()" type="primary">确 定</button>
+				</view>
+			</uni-popup>
 		</view>
 	</keep-alive>
 </template>
 
 <script>
-	import uniPopup from "@/components/uni-popup/uni-popup.vue"
+	import uniPopup from "../../components/uni-popup/uni-popup.vue"
 	export default {
 		name: 'MatrixPlate',
 		components: {
-			uniPopup
+			uniPopup,
+
 		},
 		props: {
 			'matrix': Object
@@ -35,13 +42,32 @@
 			return {
 				str: '',
 				Matrix_show: '',
+				font_size: 36
 			};
+		},
+		created() {
+			let that = this;
+			uni.getStorage({
+				key: 'FontSize',
+				success: (res) => {
+					that.font_size = res.data;
+				}
+			})
 		},
 		computed: {
 			width: function() {
 				return {
 					width: 100 / this.row - 3 + "%"
 				}
+			}
+		},
+		watch: {
+			font_size: function() {
+				let that = this;
+				uni.setStorage({
+					key: 'FontSize',
+					data: that.font_size
+				})
 			}
 		},
 		methods: {
@@ -77,58 +103,28 @@
 </script>
 
 <style>
-	.content {
-		margin: 20upx;
-		background-color: #f1f2f6;
-		border-radius: 30upx;
-		height: auto;
-		display: block;
-		overflow: visible;
+	.main {
+		width: 710rpx;
+		display: flex;
+		flex-direction: column;
+		margin-top: 20rpx;
+		border-radius: 10rpx;
+		overflow: hidden;
+		background: none;
+		box-shadow: 0rpx 0rpx 10rpx 5rpx #C8C7CC;
 	}
 
-	.header {
-		display: block;
-		border: black solid 0 0 0 3upx;
-		border-radius: 30upx 30upx 0 0;
-		height: 70upx;
-		background-color: #09BB07;
-		padding: 16upx;
+	.main .header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		background-color: #1aad19;
+		padding: 10rpx;
 	}
 
-	.inline {
-		display: inline-block;
-		margin: 12upx;
-	}
-
-	.icon1 {
-		position: absolute;
-		left: 150upx;
-		display: inline-block;
-		width: 50upx;
-		height: 50upx;
-
-	}
-
-	.icon2 {
-		position: absolute;
-		left: 250upx;
-		display: inline-block;
-		width: 50upx;
-		height: 50upx;
-	}
-
-	.left {
-		position: absolute;
-		left: 28upx;
-	}
-
-	.right {
-		position: absolute;
-		right: 28upx;
-	}
-
-	.panel {
-		display: block;
+	image {
+		width: 50rpx;
+		height: 50rpx;
 	}
 
 	.matrix {
@@ -136,25 +132,13 @@
 		align-items: center;
 		justify-content: center;
 		flex-flow: row wrap;
-		padding-bottom: 10upx;
-		margin-bottom: 16upx;
+		margin: 20rpx;
 	}
 
 	.Matrixshow {
 		white-space: pre;
 		overflow: scroll;
-	}
-	text{
-		font-size: 30upx;
-	}
-	.unit {
-		height: 60upx;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-		margin: 5upx;
-		margin-left: 0upx;
-		background-color: #ffffff;
+		max-height: 420rpx;
+
 	}
 </style>

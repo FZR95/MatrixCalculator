@@ -1,124 +1,170 @@
 <template>
 	<keep-alive>
 		<view class="content">
+			<view class="welcome" @click="Cheerup">
+				{{welcometext}}
+			</view>
 			<view>
-				<view class="CreateView">
-					<view class="rcView">
-						<view class="rc">行数：<input type="number" v-model="row" class="input" /></view>
-						<view class="rc">列数：<input type="number" v-model="column" class="input" /></view>
+				<view class="panel">
+					<image src="../../static/history.png" @click="Viewhist"></image>
+					<view class="rcview">
+						<view>行数：<input v-model="row" type="number" /></view>
+						<view>列数：<input v-model="column" type="number" /></view>
 					</view>
-					<button @click="Create()" class="CreateButton">添加</button>
+					<button @click="Create()">添加</button>
 				</view>
-				<view class="MatrixPanel">
-					<view v-if="welcometext" class="welcometext">代码已开源，详见关于。</view>
-					<view v-for="(item, index) in matrix" v-bind:key="index">
-						<matrix-plate :matrix="matrix[index]" :order="index" v-if="matrix[index].show" @Matrixtrans="matrixtrans" @Deltem="Delete"></matrix-plate>
+
+				sss <view class="MatrixPanel">
+					<view v-if="welcometext" class="welcometext"></view>
+					<matrix-plate v-for="(item, index) in matrix" v-bind:key="index" :matrix="matrix[index]" :order="index" v-if="matrix[index].show"
+					 @Matrixtrans="matrixtrans" @Deltem="Delete"></matrix-plate>
+				</view>
+				<view class="sidebar" :class="{sidebarshow:sidebar1}" @click="sidebar1=!sidebar1">
+					<image src="../../static/left.png" class="reverse"></image>
+					<button @click="toEquation">求 解 方 程</button>
+				</view>
+				<view class="sidebar" style="bottom: 350rpx;" :class="{sidebarshow:sidebar2}" @click="sidebar2=!sidebar2">
+					<image src="../../static/help.png"></image>
+					<button @click="About">帮助与其他</button>
+				</view>
+				<view class="tabbar">
+					<view class="row">
+						<button @click="FMethod(1)">+</button>
+						<button @click="FMethod(3)">×</button>
+						<button @click="FMethod(5)">转置</button>
+						<button @click="FMethod(9)">求逆</button>
+					</view>
+					<view class="row">
+						<button @click="FMethod(2)">-</button>
+						<button @click="FMethod(4)">数乘</button>
+						<button @click="FMethod(6)">行列式</button>
+						<button @click="FMethod(7)">求幂</button>
 					</view>
 				</view>
 			</view>
-			<!-- Popups -->
-			<!-- Single -->
-			<uni-popup type="center" :show="p1" :custom="true" :mask-click="false">
-				<view class="popup">
-					<text class="pop_title">需要运算的矩阵：</text>
+		</view>
+		<!-- Popups -->
+		<!-- Single -->
+		<uni-popup type="center" ref="singlepopup" :mask-click="false">
+			<view class="POPUP">
+				<view class="header">需要运算的矩阵：</view>
+				<view class="content">
 					<text class="pop_juhzen">矩阵</text>
-					<input type="number" v-model="a" class="pop_input" />
-					<button @click="ok()" class="pop_button">确定</button>
+					<input type="number" v-model="a" />
 				</view>
-			</uni-popup>
-			<!-- Double -->
-			<uni-popup type="center" :show="p2" :custom="true" :mask-click="false">
-				<view class="popup">
-					<text class="pop_title">参与运算的矩阵：</text>
+				<button @click="ok()" type="primary">确 定</button>
+			</view>
+		</uni-popup>
+		<!-- Double -->
+		<uni-popup type="center" ref="doublepopup" :mask-click="false">
+			<view class="POPUP">
+				<view class="header">参与运算的矩阵：</view>
+				<view class="content">
 					<text class="pop_juhzen">矩阵</text>
-					<input type="number" v-model="a" class="pop_input" />
-					<text class="pop_juhzen">{{methodtext}}矩阵</text>
-					<input type="number" v-model="b" class="pop_input" />
-					<button @click="ok()" class="pop_button">确定</button>
+					<input type="number" v-model="a" />
+					<text class="pop_juhzen"> {{methodtext}} 矩阵</text>
+					<input type="number" v-model="b" />
 				</view>
-			</uni-popup>
-			<!-- Scarlar -->
-			<uni-popup type="center" :show="p3" :custom="true" :mask-click="false">
-				<view class="popup">
-					<text class="pop_title">矩阵数乘：</text>
-					<input type="digit" v-model="c" class="pop_input" />
-					<text class="pop_juhzen">{{methodtext}}矩阵</text>
-					<input type="number" v-model="b" class="pop_input" />
-					<button @click="ok()" class="pop_button">确定</button>
+				<button @click="ok()" type="primary">确 定</button>
+			</view>
+		</uni-popup>
+		<!-- Scarlar -->
+		<uni-popup type="center" ref="scarlarpopup" :mask-click="false">
+			<view class="POPUP">
+				<view class="header">矩阵数乘：</view>
+				<view class="content">
+					<input v-model="c" />
+					<text class="pop_juhzen"> {{methodtext}} 矩阵</text>
+					<input type="number" v-model="b" />
 				</view>
-			</uni-popup>
-			<!-- Warning -->
-			<uni-popup type="center" :show="pw" :custom="true">
-				<view class="popup">
-					<text class="pop_title">{{warning}}</text>
-					<button @click="close()">知道了</button>
+				<button @click="ok()" type="primary">确 定</button>
+			</view>
+		</uni-popup>
+		<!-- Exponentiation -->
+		<uni-popup type="center" ref="powpopup" :mask-click="false">
+			<view class="POPUP">
+				<view class="header">矩阵求幂：</view>
+				<view class="content">
+					<text class="pop_juhzen">矩阵</text>
+					<input type="number" v-model="a" />
+					<text class="pop_juhzen">{{methodtext}}</text>
+					<input v-model="c" type="number" />
 				</view>
-			</uni-popup>
-			<!-- Result -->
-			<uni-popup type="center" :show="result" :custom="true" :maskClick=false>
-				<view class="popup">
-					<text class="pop_title">结果矩阵如下：</text>
-					<text v-if="Matrix" class="pop_showresult">{{ResultMatrix}}</text>
-					<text class="pop_showresult" v-else>{{Result}}</text>
-					<button @click="Copy()" class="pop_button pop_row">复制</button>
-					<button @click="ResultOK()" class="pop_button pop_row">确定</button>
+				<button @click="ok()" type="primary">确 定</button>
+			</view>
+		</uni-popup>
+		<!-- Warning -->
+		<uni-popup type="center" ref="warnpopup">
+			<view class="POPUP">
+				<view class="header">{{warning}}</view>
+				<button @click="close()" type="primary">知 道 了</button>
+			</view>
+		</uni-popup>
+		<!-- Result -->
+		<uni-popup type="center" ref="resultpopup" :maskClick="false">
+			<view class="POPUP">
+				<view class="header">结果矩阵如下：</view>
+				<view class="content">
+					<text v-if="Matrix">{{ResultMatrix}}</text>
+					<text v-else>{{Result}}</text>
+				</view>
+				<view style="display: flex;justify-content: space-between;">
+					<button @click="Detail()" style="width: 30%;">详情</button>
+					<button @click="Copy()" style="width: 30%;">复制</button>
+					<button @click="ResultOK()" style="width: 30%;">确定</button>
 
 				</view>
-			</uni-popup>
-			<!-- About -->
-			<uni-popup type="center" :show="about" :custom="true" :mask-click="false">
-				<view class="popup">
-					<text class="pop_title">关 于</text>
-					<scroll-view scroll-y="true" show-scrollbar="true" style="max-height: 500upx;">
-						<rich-text class="pop_juhzen texts">{{text_about}}</rich-text>
-						<button @click="Github()" class="github">GitHub</button>
-					</scroll-view>
-					
-					<button @click="close()" class="pop_button">确定</button>
+			</view>
+		</uni-popup>
+		<!-- History -->
+		<uni-popup type="center" ref="historypopup">
+			<view class="POPUP">
+				<view class="header">历史记录</view>
+				<view v-for="(item,index) in matrix" :key="index" class="histview" @click="Drawback(index)" v-if="item.show==false">
+					<view>矩阵{{item.id+1}} {{item.row}}×{{item.column}}</view>
+					<image src="../../static/drawback.png"></image>
 				</view>
-			</uni-popup>
-			<!-- Help -->
-			<uni-popup type="center" :show="help" :custom="true" :mask-click="false">
-				<view class="popup">
-					<text class="pop_title">帮 助</text>
-					<scroll-view scroll-y="true" show-scrollbar="true" style="max-height: 500upx;">
-						<rich-text class="pop_juhzen texts">{{text_help}}</rich-text>
-						<rich-text class="pop_juhzen texts red">{{text_help_red}}</rich-text>
-					</scroll-view>
-					<button @click="close()" class="pop_button">确定</button>
-				</view>
-			</uni-popup>
-			<view class="blank"> </view>
-			<Tabbar @Method="FMethod"></Tabbar>
+			</view>
+		</uni-popup>
 		</view>
 	</keep-alive>
 
 </template>
 
 <script>
-	import Tabbar from "../../components/Tabbar/Tabbar.vue"
 	import MatrixPlate from "../../components/MatrixPlate/MatrixPlate.vue"
-	import uniPopup from "@/components/uni-popup/uni-popup.vue"
-	//sync,async
+	import uniPopup from "../../components/uni-popup/uni-popup.vue"
 	export default {
 		components: {
-			Tabbar,
 			MatrixPlate,
 			uniPopup,
 		},
+		onShareAppMessage: function(res) {
+			return {
+				title: '欢迎使用矩阵计算工具',
+				path: '/pages/index/index',
+				imageUrl: '/static/gh_98d64701f7a7_430.jpg'
+			}
+		},
+		onLoad() {
+			//this.$refs.resultpopup.open();
+			var time = new Date();
+			let h = time.getHours();
+			if (h >= 4 && h <= 7) {
+				this.welcometext = '🌄伴着清晨的第一缕阳光，你早已坐在桌前，为你加油！'
+			} else if (h >= 4 || h <= 4) {
+				this.welcometext = '🌙你深夜还在努力的样子，真美'
+			}
+		},
 		data() {
 			return {
-				welcometext: true,
+				welcometext: '',
 				//矩阵数据
 				matrix: [],
-
 				//输入记录
 				num: 0, //记录矩阵个数
 				row: "2", //input中的行数，传入matrixplate中
 				column: "2",
-				text_about: '1.1版本更新日志：\r\n[新增]矩阵求逆；\r\n[移除]小数模式，默认精确至小数点后三位；\r\n[修改]不再限制所创建的矩阵数量；\r\n[修改]不再限制矩阵元素个数；\r\n[优化]列数增多后的显示效果。\r\n您的反馈将是对我的最大支持！如有问题，敬请联系Email:\r\nmatrix826@163.com  \r\n特别感谢酷安网友@美得有声有色 为本小程序陆续提供的各种建议和存在的问题。',
-				text_help: '欢迎使用本矩阵计算工具，接下来您将了解到本小程序的使用方法和小提示。\r\n1.使用方法:\r\nStep1:将想要添加矩阵的行、列填入应用最上方的输入框中，然后点击添加按钮即可。\r\nStep2:接着，点击相应矩阵的编辑按钮以进行编辑。请按照a11,a12...,a21,a22的顺序填写，中间用空格或者回车隔开，建议您依照矩阵的样式在行尾换行，更加直观便于编辑。示例填写：\r\n1 2\r\n3 4\r\nStep3:单击应用底部的按钮进行相应运算，在弹出框中填入您想要运算的矩阵或者数乘数。\r\nStep4:若您想要复制运算出的结果矩阵，或者让其参与下一步运算，点击复制按钮，创建一个相应的新矩阵，在编辑界面中粘贴即可。',
-				text_help_red: '如果您发现输入过后呈现出的矩阵有一项为0，请注意矩阵的输入仅支持英文状态下的空格，且两项之间仅由单个空格或回车隔开，空格和回车在一起也是不可以的。',
 				//运算输入
 				Method: 0,
 				a: 1, //运算矩阵A
@@ -126,11 +172,6 @@
 				c: 1, //数乘数
 
 				//popup控制
-				p1: false, //单矩阵
-				p2: false, //双矩阵
-				p3: false, //数乘矩阵
-				pw: false, //错误
-				result: false, //结果矩阵
 				warning: '',
 				methodtext: '',
 
@@ -144,27 +185,57 @@
 					[]
 				],
 				Result: 0,
+				sidebar1: false,
+				sidebar2: false
 			}
 		},
 		methods: {
+			Cheerup(){
+				uni.navigateTo({
+					url:'../cheerup/cheerup'
+				})
+			},
+			toEquation() {
+				uni.navigateTo({
+					url: '../equation/equation'
+				})
+			},
+			Viewhist() {
+				this.$refs.historypopup.open();
+			},
+			Drawback(index) {
+				this.matrix[index].show = true;
+			},
 			//矩阵管理
 			Create: function() {
-				this.welcometext = false;
 				//创建数组对象
 				var obj = {};
-				obj.id = this.num;
+				obj.id = this.num++;
 				obj.show = true;
 				obj.m = [];
 				obj.calc = [];
 				obj.row = this.row;
 				obj.column = this.column;
 				this.matrix.push(obj);
-				this.num++;
 			},
 			Delete: function(number) {
 				this.matrix[number].show = false;
-				this.matrix[number].calc = [0];
-				this.matrix[number].m = [];
+			},
+			Detail() {
+				/* let obj = {
+					matrixa: this.matrix[this.a - 1],
+					matrixb: this.matrix[this.b - 1],
+					c: this.c,
+					method: this.Method
+				} */
+				//uni.$emit('DetailPage', obj);
+				getApp().globalData.matrix[0] = this.matrix[this.a - 1];
+				getApp().globalData.matrix[1] = this.matrix[this.b - 1];
+				getApp().globalData.method = this.Method - 1;
+				getApp().globalData.c = this.c;
+				uni.navigateTo({
+					url: '/pages/detail/detail'
+				})
 			},
 			//子组件传来的$emit Matrix
 			matrixtrans: function(msg) {
@@ -174,10 +245,10 @@
 			},
 			//Popup中的确定键
 			ok: function() {
-				this.p1 = false;
-				this.p2 = false;
-				this.p3 = false;
-				this.pw = false;
+				this.$refs.singlepopup.close();
+				this.$refs.doublepopup.close();
+				this.$refs.scarlarpopup.close();
+				this.$refs.powpopup.close();
 				switch (this.Method) {
 					case 1:
 						{
@@ -201,12 +272,17 @@
 						};
 					case 5:
 						{
-							this.Transpose()();
+							this.Transpose();
 							break;
 						};
 					case 6:
 						{
 							this.Determinant();
+							break;
+						};
+					case 7:
+						{
+							this.Pow();
 							break;
 						};
 					case 9:
@@ -216,12 +292,11 @@
 				}
 			},
 			close: function() {
-				this.p1 = false;
-				this.p2 = false;
-				this.p3 = false;
-				this.pw = false;
-				this.help = false;
-				this.about = false;
+				this.$refs.singlepopup.close();
+				this.$refs.doublepopup.close();
+				this.$refs.scarlarpopup.close();
+				this.$refs.warnpopup.close();
+				this.$refs.resultpopup.close();
 			},
 			//分配运算：
 			FMethod: function(msg) {
@@ -230,58 +305,55 @@
 					case 1:
 						{
 							this.methodtext = "+";
-							this.p2 = true;
+							this.$refs.doublepopup.open();
 							break;
 						};
 					case 2:
 						{
 							this.methodtext = "-";
-							this.p2 = true;
+							this.$refs.doublepopup.open();
 							break;
 						};
 					case 3:
 						{
 							this.methodtext = "×";
-							this.p2 = true;
+							this.$refs.doublepopup.open();
 							break;
 						};
 					case 4:
 						{
 							this.methodtext = "×";
-							this.p3 = true;
+							this.$refs.scarlarpopup.open();
 							break;
 						};
 					case 5:
 						{
-							this.p1 = true;
+							this.$refs.singlepopup.open();
 							break;
 						};
 					case 6:
 						{
-							this.p1 = true;
+							this.$refs.singlepopup.open();
 							break;
 						};
 					case 7:
 						{
-							this.About();
-							break;
-						};
-					case 8:
-						{
-							this.Help();
+							this.methodtext = "^";
+							this.$refs.powpopup.open();
 							break;
 						};
 					case 9:
 						{
-							this.p1 = true;
+							this.$refs.singlepopup.open();
 							break;
 						};
 				}
 			},
 
 			ResultOK: function() {
-				this.result = false;
+				this.close();
 				this.ResultMatrix = " ";
+				this.c = 1;
 			},
 
 			Copy: function() {
@@ -306,9 +378,8 @@
 				if (rowa == rowb && columna == columnb) {
 					return true;
 				} else {
-					this.pw = true;
+					this.$refs.warnpopup.open();
 					this.warning = "两矩阵行列数需相等";
-					console.log("warn");
 					return false;
 				}
 			},
@@ -320,13 +391,10 @@
 				var rowb = this.matrix[B].row;
 				var columnb = this.matrix[B].column;
 				if (columna == rowb) {
-					console.log("true");
 					return true;
 				} else {
-					this.pw = true;
+					this.$refs.warnpopup.open();
 					this.warning = "两矩阵相乘需满足A列数等于B行数";
-					console.log("warn");
-					console.log("False");
 					return false;
 				}
 			},
@@ -337,9 +405,8 @@
 				if (rowa == columna) {
 					return true;
 				} else {
-					this.pw = true;
+					this.$refs.warnpopup.open();
 					this.warning = "矩阵行列数需相等";
-					console.log("warn");
 					return false;
 				}
 			},
@@ -406,7 +473,7 @@
 					}
 					this.ResultMatrix = this.ParseResult(matrixC, rowa, columna); //调用函数返回结果矩阵字符串
 					this.Matrix = true; //结果为矩阵，popup的v-if
-					this.result = true; //结果矩阵Popup
+					this.$refs.resultpopup.open(); //结果矩阵Popup
 				}
 			},
 			Sub: function() {
@@ -432,7 +499,7 @@
 					}
 					this.ResultMatrix = this.ParseResult(matrixC, rowa, columna);
 					this.Matrix = true;
-					this.result = true;
+					this.$refs.resultpopup.open();
 				}
 			},
 			Time: function() {
@@ -460,7 +527,7 @@
 					}
 					this.ResultMatrix = this.ParseResult(matrixC, rowa, columnb);
 					this.Matrix = true;
-					this.result = true;
+					this.$refs.resultpopup.open();
 				}
 			},
 			Scalar: function() {
@@ -481,7 +548,7 @@
 					}
 					this.ResultMatrix = this.ParseResult(matrixC, rowa, columna);
 					this.Matrix = true;
-					this.result = true;
+					this.$refs.resultpopup.open();
 				}
 			},
 			Transpose: function() {
@@ -502,7 +569,7 @@
 					}
 					this.ResultMatrix = this.ParseResult(matrixC, columna, rowa);
 					this.Matrix = true;
-					this.result = true;
+					this.$refs.resultpopup.open();
 				}
 			},
 			Determinant: function() {
@@ -519,7 +586,7 @@
 					result = this.det(matrixA, dim);
 					this.Result = result.toFixed(3);
 					this.Matrix = false;
-					this.result = true;
+					this.$refs.resultpopup.open();
 				}
 			},
 			exchange: function(matrix, i1, i2) {
@@ -627,24 +694,63 @@
 					}
 					this.ResultMatrix = this.ParseResult(matrixC, rowa, columna);
 					this.Matrix = true;
-					this.result = true;
+					this.$refs.resultpopup.open();
+				}
+			},
+			Pow: function() {
+				var A = this.a - 1;
+				var c1 = this.c;
+				var row = this.matrix[A].row;
+				var column = this.matrix[A].column;
+				//转为二维数组
+				var matrixA = new Array();
+				this.Transfer(matrixA, A);
+				var matrixA2 = new Array();
+				this.Transfer(matrixA2, A);
+				var matrixC = new Array();
+				this.Claim2D(matrixC, row, column);
+				if (this.Warning3()) {
+					if (this.c == 1) {
+						for (i = 0; i < row; i++) {
+							for (j = 0; j < column; j++) {
+								matrixC[i][j] = matrixA[i][j];
+
+							}
+						}
+					} else {
+						//1 2 3 4
+						//实际算法部分
+						while (--this.c) {
+							for (var i = 0; i < row; i++) {
+								for (var j = 0; j < column; j++) {
+									for (var k = 0; k < column; k++) {
+										matrixC[i][j] += matrixA2[i][k] * matrixA[k][j];
+									}
+								}
+							}
+							for (i = 0; i < row; i++) {
+								for (j = 0; j < column; j++) {
+									matrixA[i][j] = matrixC[i][j];
+									matrixC[i][j] = 0;
+								}
+							}
+						}
+						for (i = 0; i < row; i++) {
+							for (j = 0; j < column; j++) {
+								matrixC[i][j] = matrixA[i][j];
+							}
+						}
+					}
+					this.ResultMatrix = this.ParseResult(matrixC, row, column);
+					this.Matrix = true;
+					this.$refs.resultpopup.open();
+					this.c = c1;
 				}
 			},
 			About: function() {
-				this.about = true;
-			},
-			Help: function() {
-				this.help = true;
-			},
-			Github: function() {
-				uni.setClipboardData({
-					data: 'https://github.com/FZR95/MatrixCalculator.git',
-					success: function() {
-						uni.showToast({
-							title: "已复制至剪贴板"
-						})
-					}
-				});
+				uni.navigateTo({
+					url: '../about/about'
+				})
 			}
 		}
 	}
@@ -655,19 +761,6 @@
 	@import "../../common/Matrix.css";
 	@import "../../common/Popup.css";
 
-	.content {}
-
-	.title {
-		font-size: 36upx;
-		color: #8f8f94;
-	}
-
-	.blank {
-		display: block;
-		height: 200upx;
-		color: #FFFFFF;
-	}
-
 	.texts {
 		height: 400upx;
 		text-align: left;
@@ -677,12 +770,5 @@
 
 	.red {
 		color: #e64340;
-	}
-
-	.warn {
-		width: 100%;
-		align-items: center;
-		text-align: center;
-		font-size: 28upx;
 	}
 </style>

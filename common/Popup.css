@@ -1,57 +1,77 @@
 /*Popups*/
-.popup {
-	padding: 15upx;
-	background: #fff;
-	box-sizing: border-box;
-	border-radius: 10upx;
-	justify-content: center;
-	flex-direction: column;
-	text-align: center;
-}
-
-.pop_title {
-	display: flex;
-	text-align: center;
-	font-weight: bold;
-	font-size: 36upx;
-	line-height: 80upx;
-	color: #333;
-	justify-content: center;
-}
-
-.pop_input {
-	display: inline-flex;
-	border-bottom: #8F8F94 solid 1upx;
-	width: 100upx;
-	text-align: center;
-}
-
-.pop_juzhen {
-	display: flex;
-	font-size: 16upx;
-}
-
-.pop_button {
-	display: flex;
-	text-align: center;
-	justify-content: center;
-}
-
-.pop_showresult {
+.POPUP {
+	background-color: #FFFFFF;
+	border-radius: 10rpx;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
+	width: 650rpx;
+}
+
+.POPUP .content {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin: 0 20rpx 20rpx 20rpx;
+	align-items: center;
+	max-height: 600rpx;
+	overflow: scroll;
+}
+
+.POPUP .header {
+	margin: 10rpx 20rpx 10rpx 20rpx;
+	font-size: 42rpx;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+
+.POPUP textarea {
+	border-radius: 10rpx;
+	background-color: rgba(241, 242, 246, 0.6);
+	padding: 0 10rpx 0 10rpx;
+	text-align: center;
+}
+
+.POPUP button {
+	text-align: center;
+	justify-content: center;
+	border-radius: 10rpx;
+	padding: 10rpx 30rpx 10rpx 30rpx;
 	width: 100%;
-}
-
-.pop_button.br {
-	display: none;
-}
-
-.pop_row {
-	display: inline-block;
-	margin-right: 10upx;
-}
-
-.pop_row:last-child {
+	line-height: normal;
+	border: none;
+	background-color: #f1f2f6;
 	margin: 0;
+}
+
+.POPUP button:last-child {
+	background-color: #1aad19;
+	color: #F8F8F8;
+}
+
+.POPUP button::after {
+	border: none;
+}
+
+.POPUP input {
+	margin-left: 20rpx;
+	width: 100rpx;
+	border-radius: 10rpx;
+	background-color: rgba(241, 242, 246, 0.6);
+	text-align: center;
+}
+
+.POPUP .histview{
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+	display: flex;
+	justify-content: space-between;
+	height: 80rpx;
+	align-items: center;
+}
+.histview image{
+	width: 30rpx;
+	height: 30rpx;
 }

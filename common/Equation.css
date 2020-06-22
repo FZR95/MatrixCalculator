@@ -1,0 +1,77 @@
+.main {
+	display: flex;
+	flex-direction: column;
+	padding: 20rpx;
+}
+
+input {
+	border-radius: 10rpx;
+	background-color: #F8F8F8;
+	width: 200rpx;
+	padding: 0 10rpx 0 10rpx;
+	text-align: center;
+}
+
+button,
+button::after {
+	display: flex;
+	border: none;
+	padding: 10rpx 40rpx 10rpx 40rpx;
+	margin: 0rpx;
+	line-height: normal;
+	color: #F8F8F8;
+}
+
+textarea {
+	border-radius: 10rpx;
+	background-color: #f1f2f6;
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+	align-self: center;
+	padding: 0 10rpx 0 10rpx;
+	text-align: center;
+	height: 250rpx;
+	overflow: scroll;
+}
+
+.caption:first-child {
+	margin-top: 0;
+}
+
+.caption {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	font-weight: 600;
+	font-size: 36rpx;
+	border-radius: 10rpx 10rpx 0 0;
+	border-bottom: #1AAD19 5rpx solid;
+	margin-bottom: 20rpx;
+	margin-top: 40rpx;
+	background-color: #f1f2f6;
+	padding: 20rpx;
+}
+
+.equaview {
+	display: flex;
+	flex-direction: column;
+	overflow: scroll;
+	text-align: center;
+}
+
+.progressviewcaption {
+	display: flex;
+	justify-content: space-between;
+	line-height: 80rpx;
+	font-weight: 550;
+}
+
+.progressview {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	overflow: scroll;
+	max-height: 250rpx;
+	max-width: 710rpx;
+}
